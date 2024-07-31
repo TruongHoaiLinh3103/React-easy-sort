@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React-easy-sort</title>
+    <link href="./css/main.css" rel="stylesheet" />
+</head>
+<body>
+    <h1 id="react-easy-sort">React-easy-sort</h1>
+    <p>A React component to sort items in lists or grids</p>
+    <p><img src="https://user-images.githubusercontent.com/2678610/107036435-f27fbb00-67b9-11eb-8e3f-72a000586d35.gif" alt="react-easy-sort-demo" width="100%" height="100%" style="max-width: 500px;"></p>
+    <p>The goal of this component is to allow sorting elements with drag and drop.</p>
+    <p>It is mobile friendly by default. It doesn&#39;t block scrolling the page when swiping inside it:
+       the user needs to press an item during at least 200ms to start the drag gesture.
+    </p>
+    <p>On non-touch devices, the drag gesture only starts after moving an element by at least one pixel.
+       This is done to avoid blocking clicks on clickable elements inside an item.
+    </p>
+    <h2 id="features">Features</h2>
+    <ul>
+       <li>Supports horizontal and vertical lists</li>
+       <li>Supports grid layouts</li>
+       <li>Mobile-friendly</li>
+       <li>IE11 support 🙈</li>
+    </ul>
+    <h2 id="demo">Demo</h2>
+    <p>Check out the examples:</p>
+    <ul>
+       <li><a href="https://codesandbox.io/s/react-easy-sort-grid-demo-87ev9">Example with grid layout</a></li>
+       <li><a href="https://codesandbox.io/s/react-easy-sort-vertical-list-demo-njg4i">Example with vertical list layout</a></li>
+       <li><a href="https://codesandbox.io/s/react-easy-sort-horizontal-list-demo-69b3k">Example with horizontal list layout</a></li>
+       <li><a href="https://codesandbox.io/s/react-easy-sort-images-demo-486qk">Interactive avatars demo</a></li>
+       <li><a href="https://codesandbox.io/s/react-easy-sort-custom-knob-demo-ij37h">Example with custom knobs</a></li>
+    </ul>
+    <h2 id="installation">Installation</h2>
+    <pre class="box-x"><code class="language-shell">yarn add react-easy-sort
+    </code></pre>
+    <p>or</p>
+    <pre class="box-x"><code class="language-shell">npm install react-easy-sort --save
+    </code></pre>
+    <h2 id="basic-usage">Basic usage</h2>
+    <pre class="box-x"><code class="language-js">import SortableList, { SortableItem } from &#39;react-easy-sort&#39;
+import { arrayMoveImmutable } from &#39;array-move&#39;
+
+const App = () =&gt; {
+    const [items, setItems] = React.useState([&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39;, &#39;G&#39;, &#39;H&#39;, &#39;I&#39;])
+
+    const onSortEnd = (oldIndex: number, newIndex: number) =&gt; {
+        setItems((array) =&gt; arrayMoveImmutable(array, oldIndex, newIndex))
+    }
+
+    return (
+        &lt;SortableList onSortEnd={onSortEnd} className=&quot;list&quot; draggedItemClassName=&quot;dragged&quot;&gt;
+            {items.map((item) =&gt; (
+                &lt;SortableItem key={item}&gt;
+                    &lt;div className=&quot;item&quot;&gt;{item}&lt;/div&gt;
+                &lt;/SortableItem&gt;
+            ))}
+        &lt;/SortableList&gt;
+    )
+}
+    </code></pre>
+    <h2 id="props">Props</h2>
+    <h3 id="sortablelist">SortableList</h3>
+    <div class="box-x">
+        <table>
+            <thead>
+               <tr>
+                  <th>Name</th>
+                  <th align="center">Description</th>
+                  <th align="center">Type</th>
+                  <th align="right">Default</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td><strong>as</strong></td>
+                  <td align="center">Determines html tag for the container element</td>
+                  <td align="center"><code>keyof JSX.IntrinsicElements</code></td>
+                  <td align="right"><code>div</code></td>
+               </tr>
+               <tr>
+                  <td><strong>onSortEnd*</strong></td>
+                  <td align="center">Called when the user finishes a sorting gesture.</td>
+                  <td align="center"><code>(oldIndex: number, newIndex: number) =&gt; void</code></td>
+                  <td align="right">-</td>
+               </tr>
+               <tr>
+                  <td><strong>draggedItemClassName</strong></td>
+                  <td align="center">Class applied to the item being dragged</td>
+                  <td align="center"><code>string</code></td>
+                  <td align="right">-</td>
+               </tr>
+               <tr>
+                  <td><strong>lockAxis</strong></td>
+                  <td align="center">Determines if an axis should be locked</td>
+                  <td align="center"><code>&#39;x&#39;</code> or <code>&#39;y&#39;</code></td>
+                  <td align="right"></td>
+               </tr>
+               <tr>
+                  <td><strong>allowDrag</strong></td>
+                  <td align="center">Determines whether items can be dragged</td>
+                  <td align="center"><code>boolean</code></td>
+                  <td align="right"><code>true</code></td>
+               </tr>
+               <tr>
+                  <td><strong>customHolderRef</strong></td>
+                  <td align="center">Ref of an element to use as a container for the dragged item</td>
+                  <td align="center"><code>React.RefObject&lt;HTMLElement | null&gt;</code></td>
+                  <td align="right"><code>document.body</code></td>
+               </tr>
+               <tr>
+                  <td><strong>dropTarget</strong></td>
+                  <td align="center">React element to use as a dropTarget</td>
+                  <td align="center"><code>ReactNode</code></td>
+                  <td align="right"></td>
+               </tr>
+            </tbody>
+        </table>
+    </div>
+    <h3 id="sortableitem">SortableItem</h3>
+    <p>This component doesn&#39;t take any other props than its child. This child should be a single React element that can receives a ref. If you pass a component as a child, it needs to be wrapped with <code>React.forwardRef()</code>.</p>
+    <h3 id="sortableknob">SortableKnob</h3>
+    <p>You can use this component if you don&#39;t want the whole item to be draggable but only a specific area of it.</p>
+    <pre class="box-x"><code class="language-js">import SortableList, { SortableItem, SortableKnob } from &#39;react-easy-sort&#39;
+import arrayMove from &#39;array-move&#39;
+
+const App = () =&gt; {
+    const [items, setItems] = React.useState([&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39;, &#39;G&#39;, &#39;H&#39;, &#39;I&#39;])
+
+    const onSortEnd = (oldIndex: number, newIndex: number) =&gt; {
+        setItems((array) =&gt; arrayMove(array, oldIndex, newIndex))
+    }
+
+    return (
+    &lt;SortableList onSortEnd={onSortEnd} className=&quot;list&quot; draggedItemClassName=&quot;dragged&quot;&gt;
+        {items.map((item) =&gt; (
+            &lt;SortableItem key={item}&gt;
+                &lt;div className=&quot;item&quot;&gt;
+                    &lt;SortableKnob&gt;
+                        &lt;div&gt;Drag me&lt;/div&gt;
+                    &lt;/SortableKnob&gt;
+                    {item}
+                &lt;/div&gt;
+            &lt;/SortableItem&gt;
+        ))}
+    &lt;/SortableList&gt;
+    )
+}
+    </code></pre>
+    <p>This component doesn&#39;t take any other props than its child. This child should be a single React element that can receive a ref. If you pass a component as a child, it needs to be wrapped with <code>React.forwardRef()</code>.</p>
+    <h2 id="recommended-css-rules">Recommended CSS rules</h2>
+    <p>To disable browser default behaviors that can interfer with the dragging experience, we recommend adding the following declarations on the &quot;items&quot;:</p>
+    <ul>
+       <li><code>user-select: none;</code>: disable the selection of content inside the item (the blue box)</li>
+       <li><code>pointer-events: none;</code>: required for some browsers if your items contain images (see the <a href="https://codesandbox.io/s/react-easy-sort-images-demo-486qk">Interactive avatars demo</a>)</li>
+    </ul>
+</body>
+</html>
